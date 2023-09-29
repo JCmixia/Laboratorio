@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>TODO supply a title</title>
+        <link rel="stylesheet" 
+              href="#{facesContext.externalContext.requestContextPath}/resources/css/default.css"/>
+        <link rel="stylesheet"
+              href="#{facesContext.externalContext.requestContextPath}/resources/css/theme.css"/>
+        <script type="text/javascript"
+                src="#{facesContext.externalContext.requestContextPath}/resources/js/script.js"/>
+        <title>TODO supply a title</title>
+    </h:head>
+    <h:body>
+
+        <div>
+            <h:form>
+                <p:outputLabel value="#{bkn_Inicio.mensaje}" />
+                <br></br>
+                <p:panelGrid columns="2">     
+                    <p:outputLabel value="Nombre"/>
+                    <p:inputText id="txtNombre" value="#{bkn_Inicio.dato2}"/>
+                    <p:outputLabel value="Correo"/>
+                    <p:inputText id="txtCorreo" value="#{bkn_Inicio.dato3}"/>
+                    <p:outputLabel value="Direccion"/>
+                    <p:inputText id="txtDireccion" value="#{bkn_Inicio.dato4}"/>
+                    <p:outputLabel value="Telefono"/>
+                    <p:inputText id="txtTelefono" value="#{bkn_Inicio.dato5}"/>
+                    <p:commandButton id="btnInicio" value="Inicio" action="#{bkn_Inicio.motrarDatos()}" update="tblLista"/>
+                </p:panelGrid>
+                <br></br>
+                <p:outputLabel id="txtNombreCompleto" value="#{bkn_Inicio.dato3}" rendered="true"/>
+                <br></br><!-- comment -->
+                <p:dataTable id="tblLista" value="#{bkn_Inicio.lista}" var="item">
+                     <p:column>
+                        <f:facet name="header">
+                            ID
+                        </f:facet>
+                         <p:outputLabel value="#{item.id}"/> 
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            Nombre
+                        </f:facet>
+                        <p:outputLabel value="#{item.nombre}"/> 
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            Direccion
+                        </f:facet>
+                        <p:outputLabel value="#{item.direccion}"/> 
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            Correo
+                        </f:facet>
+                        <p:outputLabel value="#{item.correo}"/> 
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            Telefono
+                        </f:facet>
+                        <p:outputLabel value="#{item.telefono}"/> 
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+            <!--   
+            <img src="../../img/javascript.png" alt="No se puede mostrar la imagen" width="100px"/>
+            -->
+        </div>
+
+    </h:body>
+</html>
