@@ -1,0 +1,50 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+ 
+     <h:head>
+         <title>TODO supply a title</title>
+         <style>
+             body{
+                 background-image: url(../../img/pai.jpg);
+                  background-size: cover;
+                  
+             }
+             
+             .color{
+                 color: white;
+             }
+             
+             .centrar{
+                 width: 300px;
+                 margin: 0 auto;
+             }
+             
+         </style>
+     </h:head>
+     <h:body>
+   
+             <div class="centrar">
+                 <h:form>
+                 <p:outputLabel class="color" value="#{bkn_Inicio.mensaje}" />
+                 <br></br>
+             <p:panelGrid columns="2">
+                 <p:outputLabel value="Nombre"/>
+                 <p:inputText id="txtNombre" value="#{bkn_Inicio.dato1}"/>
+                 <p:outputLabel value="Apellido"/>
+                 <p:inputText id="txtApellido" value="#{bkn_Inicio.dato2}"/>
+                <p:commandButton id="btnInicio" value="Inicio" action="#{bkn_Inicio.motrarDatos()}" update="txtNombreCompleto"/>
+             </p:panelGrid>
+                 <br></br>
+                 <p:outputLabel class="centrar color" id="txtNombreCompleto" value="#{bkn_Inicio.dato3}" rendered="#{bkn_Inicio.band}"/>
+               
+                 </h:form>
+                 
+                 <!--   
+                 <img src="../../img/javascript.png" alt="No se puede mostrar la imagen" width="100px"/>
+                 -->
+            </div>
+       
+     </h:body>
+</html>
