@@ -17,7 +17,7 @@ import umg.edu.gt.DTO.DatosDTO;
  *
  * @author Isai
  */
-public class ConsultasDAO {
+public class ConsultasDAO{
     
     ConexionDAO con = new ConexionDAO();
     
@@ -55,21 +55,84 @@ public class ConsultasDAO {
         return Lista;
     }
     
-    public void insertar(DatosDTO pDatos){
+    public void insertar(DatosDTO cliente){
   
         try{
-            String query="INSERT INTO clientes VALUES ("+pDatos.getId()+",'"+pDatos.getNombre()+"','"+pDatos.getCorreo()+"','"+pDatos.getDireccion()+"','"+pDatos.getTelefono()+"')";
-            //String query="INSERT INTO clientes VALUES ('"+pDatos.getNombre()+"','"+pDatos.getCorreo()+"','"+pDatos.getDireccion()+"','"+pDatos.getTelefono()+"')";
+            String query="INSERT INTO clientes VALUES ("+cliente.getId()+",'"+cliente.getNombre()+"','"+cliente.getCorreo()+"','"+cliente.getDireccion()+"','"+cliente.getTelefono()+"')";
+            //String query="INSERT INTO clientes VALUES ('"+cliente.getNombre()+"','"+cliente.getCorreo()+"','"+cliente.getDireccion()+"','"+cliente.getTelefono()+"')";
             //String query = "INSERT INTO clientes VALUES (6, 'isai', 'isaimixia18@gmail.com','Santa Luxia', '48407205')";  
             Statement s = con.conexionMysql().createStatement();
             s.executeUpdate(query);
             
-            System.out.println("---------------------------------------------------");
-            System.out.println("Id: "+pDatos.getId()+"Nombre: "+pDatos.getNombre()+"Correo: "+pDatos.getCorreo()+"Direccion: "+pDatos.getDireccion()+"Telefono: "+pDatos.getTelefono());
+            System.out.println("-------------------Datos Insertados--------------------------------");
+            System.out.println("Id: "+cliente.getId()+"Nombre: "+cliente.getNombre()+"Correo: "+cliente.getCorreo()+"Direccion: "+cliente.getDireccion()+"Telefono: "+cliente.getTelefono());
             System.out.println("---------------------------------------------------");
               
         } catch(Exception e){
             System.out.println("Error al realizar la insercion");
+        }
+    }
+    
+    
+    public void actualizar(DatosDTO cliente){
+  
+        try{
+            //String query="INSERT INTO clientes VALUES ("+pDatos.getId()+",'"+pDatos.getNombre()+"','"+pDatos.getCorreo()+"','"+pDatos.getDireccion()+"','"+pDatos.getTelefono()+"')";
+            String query = "UPDATE clientes SET ";
+
+            if (cliente.getNombre() != null && !cliente.getNombre().isEmpty()) {
+                query += "nombre='" + cliente.getNombre() + "', ";
+            } else {
+                query += "nombre=nombre, "; // Keep the existing value
+            }
+
+            if (cliente.getCorreo() != null && !cliente.getCorreo().isEmpty()) {
+                query += "correo='" + cliente.getCorreo() + "', ";
+            } else {
+                query += "correo=correo, "; // Keep the existing value
+            }
+
+            if (cliente.getDireccion() != null && !cliente.getDireccion().isEmpty()) {
+                query += "direccion='" + cliente.getDireccion() + "', ";
+            } else {
+                query += "direccion=direccion, "; // Keep the existing value
+            }
+
+            if (cliente.getTelefono() != null && !cliente.getTelefono().isEmpty()) {
+                query += "telefono='" + cliente.getTelefono() + "', ";
+            } else {
+                query += "telefono=telefono, "; // Keep the existing value
+            }
+            
+            if (query.endsWith(", ")) {
+                query = query.substring(0, query.length() - 2);
+            }
+
+            query += " WHERE id='" + cliente.getId() + "'";
+
+            Statement s = con.conexionMysql().createStatement();
+            s.executeUpdate(query);
+            
+            System.out.println("---------------Datos Actualizados------------------------------------");
+            System.out.println("Id: "+cliente.getId()+"Nombre: "+cliente.getNombre()+"Correo: "+cliente.getCorreo()+"Direccion: "
+                    +cliente.getDireccion()+"Telefono: "+cliente.getTelefono());
+            System.out.println("---------------------------------------------------");
+              
+        } catch(Exception e){
+            System.out.println("Error al realizar la actualizacion");
+        }
+    }
+    
+    public void eliminar(DatosDTO cliente) throws Exception {
+       
+        try {
+            
+            String query = "DELETE FROM clientes WHERE id ="+cliente.getId();
+            Statement s = con.conexionMysql().createStatement();
+            s.executeUpdate(query);
+
+        } catch (SQLException ex) {
+            throw new SQLException("Error al eliminar el cliente: " + ex.getMessage());
         }
     }
 } 

@@ -4,8 +4,6 @@
  */
 package umg.edu.gt.laboratorio;
 
-
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 
@@ -21,6 +19,9 @@ import java.net.http.HttpClient;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.bean.ViewScoped;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 import umg.edu.gt.DAO.ConexionDAO;
 import umg.edu.gt.DAO.ConsultasDAO;
 import umg.edu.gt.DTO.DatosDTO;
@@ -30,119 +31,164 @@ import umg.edu.gt.DTO.DatosDTO;
  * @author soporte
  */
 //esto es una notacion, para llamarlo dedede el xhtml
-@ManagedBean(name="bkn_Inicio")
-public class InicioUI implements Serializable{
+@ManagedBean(name = "bkn_Inicio")
+@ViewScoped
+public class InicioUI implements Serializable {
 
     private String mensaje;
-    
+
     private String dato1;
     private String dato2;
     private String dato3;
     private String dato4;
     private String dato5;
-    
+
+    private DatosDTO datos;
+
     private boolean band;
     private List<DatosDTO> lista = new ArrayList<DatosDTO>();
-    
+
    
     //sprivate band ;
-
     /**
      * @return the mensaje
      */
     @PostConstruct
-    public void init(){
+    public void init() {
         //setMensaje("Hola mundo, mi primer comentario web con jsf2"); 
-        
+
         ConexionDAO con = new ConexionDAO();
         ConsultasDAO consulta = new ConsultasDAO();
-        
-        
-        try{
-            
+
+        try {
+
             setLista(consulta.findAllCliente());
             System.out.println("la conexion es: " + con.conexionMysql());
             System.out.println("La lista es: " + getLista().size());
             System.out.println("El nombre es: " + getLista().get(0).getNombre());
-            
-        }catch(Exception ex){
+
+        } catch (Exception ex) {
             System.out.println("Error de la conexion" + ex);
         }
-        
-         this.mensaje1();
-         
-        /*
-         try{
-             this.consumeWS();
-             
-         }catch(Exception ex){
-             System.out.println("Error al consumir el WS");
-         }
-       */
+
+        this.mensaje1();
     }
-   
-    public void mensaje1(){
-        mensaje = "Bienvenidos a mi pagina web";
-       // setMensaje("Hola mundo desde un metodo ------>");
+
+    public void mensaje1() {
+        mensaje = "Bienvenidos"
+                + ""
+                + "";
+        // setMensaje("Hola mundo desde un metodo ------>");
     }
-   
+
     /**
      * @param mensaje the mensaje to set
      */
-    public void motrarDatos() throws Exception{ 
-        
+    
+    public void insertaCliente() throws Exception{
+        accionesCliente(1);
+    }
+
+    public void actualizarCliente() throws Exception{
+         accionesCliente(2);
+    }
+
+    public void eliminarCliente() throws Exception{
+        accionesCliente(3);
+    }
+    
+    public void accionesCliente(int opt) throws Exception {
+
         ConexionDAO con = new ConexionDAO();
         ConsultasDAO consulta = new ConsultasDAO();
-        DatosDTO datos = new DatosDTO();
-        
-        //datos.setId(Long.parseLong(dato1));
-        datos.setNombre(dato2);
-        datos.setCorreo(dato3);
-        datos.setDireccion(dato4);
-        datos.setTelefono(dato5);
-        
-        
-        try{
-            consulta.insertar(datos);
+        DatosDTO cliente = new DatosDTO();
+
+        try {
+
+            cliente.setNombre(dato2);
+            cliente.setCorreo(dato3);
+            cliente.setDireccion(dato4);
+            cliente.setTelefono(dato5);
+
+            switch (opt) {
+                case 1:
+                    consulta.insertar(cliente);
+                    break;
+                case 2:
+                    cliente.setId(Long.parseLong(dato1));
+                    consulta.actualizar(cliente);
+                    break;
+                case 3:
+                    cliente.setId(Long.parseLong(dato1));
+                    consulta.eliminar(cliente);
+                    break;
+            }
+
             setLista(consulta.findAllCliente());
+
             System.out.println("la conexion es: " + con.conexionMysql());
             System.out.println("La lista es: " + getLista().size());
             System.out.println("El nombre es: " + getLista().get(0).getNombre());
-            
-        }catch(Exception ex){
-            System.out.println("Error de la conexion" + ex);
-        }finally {
-            if (con != null) {
+
+            dato1 = "";
+            dato2 = "";
+            dato3 = "";
+            dato4 = "";
+            dato5 = "";
+            band = false;
+        } catch (Exception ex) {
+            System.out.println("Error de la accion de cliente" + ex);
+        } finally {
+            if (con != null){
                 try {
-                   con.conexionMysql().close();
-                   System.out.println("Cierre de conexion exitosa");
-                }catch(SQLException ex){
+                    con.conexionMysql().close();
+                    System.out.println("Cierre de conexion exitosa");
+                } catch (SQLException ex) {
                     System.out.println("Error al cerrar conexion" + ex.getMessage());
                 }
-            }  
-        } 
-        /*
-        
-        System.out.println("Dato 1: "+getDato1());
-        System.out.println("Dato 2: "+getDato2());
-        System.out.println("Nombre: "+getDato1()+" Apellido: "+getDato2());
-        setDato3("Nombre: " + getDato1() + " Apellido: " + getDato2());      
-        */
-        
-        /*
-        try{
-            this.consumeWS();
-        }catch(Exception e){
-            System.out.println("Erro al consumir el WS");
-       
+            }
         }
-        */
-        
-        
-        
+
+    }
+
+   
+
+    //Cuando se selecciona un dato
+    public void onRowSelect(SelectEvent event) {
+        datos = (DatosDTO) event.getObject();
+
+        dato1 = Long.toString(datos.getId());
+        dato2 = datos.getNombre();
+        dato3 = datos.getCorreo();
+        dato4 = datos.getDireccion();
+        dato5 = datos.getTelefono();
+        band = true;
+
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+        dato1 = "";
+        dato2 = "";
+        dato3 = "";
+        dato4 = "";
+        dato5 = "";
+
     }
     
-     /**
+    /**
+     * @return the datos
+     */
+    public DatosDTO getDatos() {
+        return datos;
+    }
+
+    /**
+     * @param datos the datos to set
+     */
+    public void setDatos(DatosDTO datos) {
+        this.datos = datos;
+    }
+    /**
      * @return the band
      */
     public boolean isBand() {
@@ -155,14 +201,14 @@ public class InicioUI implements Serializable{
     public void setBand(boolean band) {
         this.band = band;
     }
+
     /**
      * @param mensaje the mensaje to set
      */
-    
     public String getMensaje() {
         return mensaje;
     }
-     
+
     public void setMensaje(String mensaje) {
         this.mensaje = mensaje;
     }
@@ -177,7 +223,7 @@ public class InicioUI implements Serializable{
     /**
      * @param dato1 the dato1 to set
      */
-    public void setDato1(String dato1){
+    public void setDato1(String dato1) {
         this.dato1 = dato1;
     }
 
@@ -208,8 +254,8 @@ public class InicioUI implements Serializable{
     public void setDato3(String dato3) {
         this.dato3 = dato3;
     }
-    
-        /**
+
+    /**
      * @return the lista
      */
     public List<DatosDTO> getLista() {
@@ -222,7 +268,7 @@ public class InicioUI implements Serializable{
     public void setLista(List<DatosDTO> lista) {
         this.lista = lista;
     }
-    
+
     /**
      * @return the dato4
      */
@@ -236,7 +282,7 @@ public class InicioUI implements Serializable{
     public void setDato4(String dato4) {
         this.dato4 = dato4;
     }
-    
+
     /**
      * @return the dato5
      */
@@ -250,8 +296,8 @@ public class InicioUI implements Serializable{
     public void setDato5(String dato5) {
         this.dato5 = dato5;
     }
-    
-    public void consumeWS() throws IOException, InterruptedException{
+
+    public void consumeWS() throws IOException, InterruptedException {
         /*
         try{
          //URL url = new URL("http://localhost:8080/LabWS/webresources/DesarrolloWeb/primerWS");
@@ -279,19 +325,19 @@ public class InicioUI implements Serializable{
         }catch(Exception e){
             e.printStackTrace();
         }
-        */
-        /*
+         */
+ /*
         try{
            
         } catch(Exception e){
             e.printStackTrace();
         }
-        */
-        
-        String url= "http://localhost:8090/LabWS/webresources/DesarrolloWeb/primerWS";
-               
+         */
+
+        String url = "http://localhost:8090/LabWS/webresources/DesarrolloWeb/primerWS";
+
         HttpClient client = HttpClient.newHttpClient();
-        
+
         // Crear una solicitud GET sin parámetros
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
@@ -301,26 +347,20 @@ public class InicioUI implements Serializable{
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         // Imprimir el cuerpo de la respuesta
         System.out.println(response.body());
-        
+
         // Crear una solicitud POST con parámetros
         request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-               .build();
-        
+                .build();
+
         // Enviar la solicitud y obtener la respuesta
         response = client.send(request, HttpResponse.BodyHandlers.ofString());
         // Imprimir el cuerpo de la respuesta
         System.out.println("respuesta: " + response.body());
-                
-        
+
         //JsonParser parser = new JsonParser();        
-        
-        
         //JsonArray jsonArray = JsonParser.parseString(response.body()).getAsJsonArray();
-        
-       
-       
-       // JsonArray jsonArray = parser.parse(response.body()).getAsJsonArray();
+        // JsonArray jsonArray = parser.parse(response.body()).getAsJsonArray();
         /*
         // Ahora puedes trabajar con el objeto JSON de tipo array
         for (int i = 0; i < jsonArray.size(); i++) {
@@ -332,7 +372,7 @@ public class InicioUI implements Serializable{
             System.out.println("Nombre: " + nombre);
             System.out.println("Edad: " + link);
         }
-        */
+         */
     }
 
 }

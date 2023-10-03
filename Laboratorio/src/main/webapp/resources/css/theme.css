@@ -9,7 +9,7 @@
         float:none;
         text-align: center !important;
     }
-    
+
     #keypad-div{
         font-size: 1em !important;
     }
@@ -31,7 +31,7 @@
     .ui-grid-responsive .ui-grid-row{
         display:block;
     }
-    
+
     .ui-grid-responsive .ui-grid-col-4{
         width:45% ;
         float:none;
@@ -42,18 +42,18 @@
         float:none;
         text-align: left !important;
     }
-    
+
     .ui-grid-responsive .ui-grid-col-5, .ui-grid-responsive .ui-grid-col-6, .ui-grid-responsive .ui-grid-col-7{
         width:50%;
         float:none;
     }
-    
+
     .ui-grid-responsive .ui-grid-col-3{
         width:25%;
         float:none;
         text-align: center !important;
     }
-    
+
     #keypad-div{
         font-size: 1em !important;
     }
@@ -70,7 +70,7 @@
         width: 45px !important;
     }
 }
- 
+
 .ui-steps .ui-steps-item {
     width: 30%;
 }
@@ -78,7 +78,7 @@
 .ui-state-highlight {
     text-shadow: none !important;
 }
- 
+
 .ui-steps.custom {
     margin-bottom: 30px;
 }
@@ -87,7 +87,7 @@
     height: 10px;
     padding: 0 1em;
 }
- 
+
 .ui-steps.custom .ui-steps-item .ui-steps-number {
     background-color: #0069a0;
     color: #FFFFFF;
@@ -223,7 +223,7 @@ a {
 
 .calendar>.ui-inputfield{
     width: 70% !important;
-    
+
 }
 
 .ui-multiselectlistbox-header {
@@ -262,10 +262,10 @@ a {
 }
 
 .ui-autocomplete .ui-autocomplete-input{
-    
+
 }
 
-.ui-selectonemenu .ui-inputfield, .ui-selectonemenu .ui-inputfield:hover, 
+.ui-selectonemenu .ui-inputfield, .ui-selectonemenu .ui-inputfield:hover,
 .ui-selectonemenu .ui-inputfield:focus, .ui-multiselectlistbox-listcontainer {
     border: 0px !important;
 }
@@ -295,8 +295,8 @@ span.ui-calendar-center > input.ui-inputfield {
     max-height: 200px !important;
 }
 
-.ui-inputfield:focus, .ui-inputfield:hover, .ui-inputtext:focus, .ui-inputtext:hover, .ui-inputswitch:hover, 
-.ui-inputtextarea-resizable:focus, .ui-inputtextarea-resizable:hover, 
+.ui-inputfield:focus, .ui-inputfield:hover, .ui-inputtext:focus, .ui-inputtext:hover, .ui-inputswitch:hover,
+.ui-inputtextarea-resizable:focus, .ui-inputtextarea-resizable:hover,
 .ui-selectonemenu:hover, .ui-selectcheckboxmenu:hover, .ui-selectonemenu-item:hover, .ui-selectlistbox-item:hover, .ui-inputmask:focus, .ui-inputmask:hover,
 .ui-radiobutton-box:hover, .ui-chkbox-box:hover {
     border: 1px solid #0069a0 !important;
@@ -377,3 +377,4 @@ div.textoBlancoFondoAqua>ul.ui-menu-list>li.ui-menuitem>a.ui-menuitem-link>span.
     padding: 0.1em 1em 0.1em 1em !important;
     cursor: help !important;
 }
+
