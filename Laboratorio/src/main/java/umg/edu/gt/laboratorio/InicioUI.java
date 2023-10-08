@@ -20,8 +20,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import org.primefaces.PrimeFaces;
+
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
+
 import umg.edu.gt.DAO.ConexionDAO;
 import umg.edu.gt.DAO.ConsultasDAO;
 import umg.edu.gt.DTO.DatosDTO;
@@ -53,25 +57,20 @@ public class InicioUI implements Serializable {
     /**
      * @return the mensaje
      */
-    @PostConstruct
+
     public void init() {
         //setMensaje("Hola mundo, mi primer comentario web con jsf2"); 
-
         ConexionDAO con = new ConexionDAO();
         ConsultasDAO consulta = new ConsultasDAO();
-
+        
         try {
 
             setLista(consulta.findAllCliente());
-            System.out.println("la conexion es: " + con.conexionMysql());
-            System.out.println("La lista es: " + getLista().size());
-            System.out.println("El nombre es: " + getLista().get(0).getNombre());
-
+           
         } catch (Exception ex) {
             System.out.println("Error de la conexion" + ex);
         }
-
-        this.mensaje1();
+      
     }
 
     public void mensaje1() {
@@ -84,18 +83,14 @@ public class InicioUI implements Serializable {
     /**
      * @param mensaje the mensaje to set
      */
-    
-    public void insertaCliente() throws Exception{
-        accionesCliente(1);
+    public void inicio() throws IOException{
+         
+        FacesContext context = FacesContext.getCurrentInstance();
+        
+        context.getExternalContext().redirect("crudCliente.xhtml");
+       
     }
 
-    public void actualizarCliente() throws Exception{
-         accionesCliente(2);
-    }
-
-    public void eliminarCliente() throws Exception{
-        accionesCliente(3);
-    }
     
     public void accionesCliente(int opt) throws Exception {
 

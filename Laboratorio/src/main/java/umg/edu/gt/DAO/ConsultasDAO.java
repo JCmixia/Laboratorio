@@ -140,7 +140,7 @@ public class ConsultasDAO{
         //SonarQB si es que consigue una version gratis
         //Investigar que es ORM
         //Hibernet, JPA
-    //JRebel
-    //Como persistir en hibernet
+        //JRebel
+        //Como persistir en hibernet
 
 
