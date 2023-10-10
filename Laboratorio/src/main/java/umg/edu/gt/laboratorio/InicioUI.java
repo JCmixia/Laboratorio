@@ -36,6 +36,7 @@ import umg.edu.gt.DTO.DatosDTO;
 @ViewScoped
 public class InicioUI implements Serializable {
 
+  
     private String mensaje;
 
     private String dato1;
@@ -52,6 +53,10 @@ public class InicioUI implements Serializable {
     private String dato10;
     private String dato11;
     private String dato12;
+    
+    private String dato13;
+    private String dato14;
+    private String dato15;
 
     private DatosDTO datos;
 
@@ -59,6 +64,7 @@ public class InicioUI implements Serializable {
     private List<DatosDTO> clientes = new ArrayList<DatosDTO>();
     private List<DatosDTO> ordenes = new ArrayList<DatosDTO>();
     private List<DatosDTO> detalle_ordenes = new ArrayList<DatosDTO>();
+    private List<DatosDTO> productos = new ArrayList<DatosDTO>();
 
     @PostConstruct
     public void init() {
@@ -71,7 +77,7 @@ public class InicioUI implements Serializable {
             setClientes(consulta.consultarCliente());
             setOrdenes(consulta.consultarOrdenes());
             setDetalle_ordenes(consulta.consultarDetalle());
-            //setDetalle_ordenes(consulta.findAllOrdenes());
+            setProductos(consulta.consultarProductos());
             System.out.println("La conexion es:" + con.conexionMysql());
             System.out.println("La lista es: " + getClientes().size());
             System.out.println("El nombre es " + getClientes().get(0).getNombre());
@@ -96,7 +102,7 @@ public class InicioUI implements Serializable {
         }
 
     }
-
+/////////////////////////////////////CLIENTES///////////////////////////////////////////////////////////////
     public void accionesCliente(int opt) throws Exception {
 
         ConexionDAO con = new ConexionDAO();
@@ -209,7 +215,7 @@ public class InicioUI implements Serializable {
 
     }
 
-    /////////////////////////////////////DETALLE_ORDENES////////////////////////////////////////////
+    /////////////////////////////////////////DETALLE_ORDENES////////////////////////////////////////////////
     public void accionesDetalle_ordenes(int opt) throws Exception {
 
         ConexionDAO con = new ConexionDAO();
@@ -271,7 +277,89 @@ public class InicioUI implements Serializable {
         }
 
     }
+    //////////////////////////////////////////////PRODUCTOS//////////////////////////////////////////////
+     public void accionesProductos(int opt) throws Exception {
 
+        ConexionDAO con = new ConexionDAO();
+        ConsultasDAO consulta = new ConsultasDAO();
+        DatosDTO producto = new DatosDTO();
+
+        try {
+
+            producto.setNombre(dato2);
+            producto.setDescripcion(dato13);
+            producto.setPrecio(Long.parseLong(dato12));
+            producto.setCantidad(Long.parseLong(dato11));
+
+            switch (opt) {
+                case 1:
+                    consulta.insertarProducto(producto);
+                    break;
+                case 2:
+                    producto.setId(Long.parseLong(dato1));
+                    consulta.actualizarProducto(producto);
+                    break;
+                case 3:
+                    producto.setId(Long.parseLong(dato1));
+                    consulta.eliminarProducto(producto);
+                    break;
+            }
+
+            setProductos(consulta.consultarProductos());
+
+            System.out.println("la conexion es: " + con.conexionMysql());
+            System.out.println("La lista de clientes es: " + getClientes().size());
+            System.out.println("El nombre es: " + getClientes().get(0).getNombre());
+
+            dato1 = "";
+            dato2 = "";
+            dato3 = "";
+            dato4 = "";
+            dato5 = "";
+            dato6 = "";
+            dato7 = "";
+            dato8 = "";
+            dato9 = "";
+            dato10 = "";
+            dato11 = "";
+            dato12 = "";
+            dato13 = "";
+            dato14 = "";
+            dato15 = "";
+            
+            
+            band = false;
+        } catch (Exception ex) {
+            System.out.println("Error de la accion de detalle_ordenes" + ex);
+        } finally {
+            if (con != null) {
+                try {
+                    con.conexionMysql().close();
+                    System.out.println("Cierre de conexion exitosa");
+                } catch (SQLException ex) {
+                    System.out.println("Error al cerrar conexion" + ex.getMessage());
+                }
+            }
+        }
+
+    }
+    
+     
+    /**
+     * @return the productos
+     */
+    public List<DatosDTO> getProductos() {
+        return productos;
+    }
+
+    /**
+     * @param productos the productos to set
+     */
+    public void setProductos(List<DatosDTO> productos) {
+        this.productos = productos;
+    }
+
+    
     /**
      * @return the dato12
      */
@@ -396,7 +484,14 @@ public class InicioUI implements Serializable {
             dato11 = Long.toString(datos.getCantidad());
             dato12 = Long.toString(datos.getPrecio());
         }
-
+        
+        if (datos.getCantidad() != null && datos.getPrecio() != null){
+            dato11 = Long.toString(datos.getCantidad());
+            dato12 = Long.toString(datos.getPrecio());
+        }
+        
+        dato13 = datos.getDescripcion();
+        
         band = true;
 
     }
@@ -408,6 +503,48 @@ public class InicioUI implements Serializable {
         dato4 = "";
         dato5 = "";
 
+    }
+    
+     /**
+     * @return the dato13
+     */
+    public String getDato13() {
+        return dato13;
+    }
+
+    /**
+     * @param dato13 the dato13 to set
+     */
+    public void setDato13(String dato13) {
+        this.dato13 = dato13;
+    }
+
+    /**
+     * @return the dato14
+     */
+    public String getDato14() {
+        return dato14;
+    }
+
+    /**
+     * @param dato14 the dato14 to set
+     */
+    public void setDato14(String dato14) {
+        this.dato14 = dato14;
+    }
+
+    /**
+     * @return the dato15
+     */
+    public String getDato15() {
+        return dato15;
+    }
+
+    /**
+     * @param dato15 the dato15 to set
+     */
+    public void setDato15(String dato15) {
+        this.dato15 = dato15;
     }
 
     /**

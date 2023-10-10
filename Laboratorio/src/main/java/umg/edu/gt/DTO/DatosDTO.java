@@ -13,6 +13,8 @@ import javax.faces.bean.ManagedBean;
 public class DatosDTO {
 
    
+
+   
     private Long id;
     private String nombre;
     private String correo;
@@ -28,6 +30,22 @@ public class DatosDTO {
     private Long cantidad;
     private Long precio;
     
+
+    private String descripcion;
+    
+     /**
+     * @return the descripcion
+     */
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    /**
+     * @param descripcion the descripcion to set
+     */
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
     
     /**
      * @return the orden_id

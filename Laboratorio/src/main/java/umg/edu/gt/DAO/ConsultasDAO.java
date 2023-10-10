@@ -20,6 +20,7 @@ import umg.edu.gt.DTO.DatosDTO;
 public class ConsultasDAO {
 
     ConexionDAO con = new ConexionDAO();
+////////////////////////////////////CLIENTES////////////////////////////////////////////////////////////////
 
     public List<DatosDTO> consultarCliente() throws Exception {
         List<DatosDTO> Lista = new ArrayList<DatosDTO>();
@@ -130,7 +131,7 @@ public class ConsultasDAO {
         }
     }
 
-    ///////////////////////////////////////ORDENES////////////////////////////////////////////////////////
+    //////////////////////////////////////////ORDENES////////////////////////////////////////////////////////
     public List<DatosDTO> consultarOrdenes() throws Exception {
         List<DatosDTO> Lista = new ArrayList<DatosDTO>();
 
@@ -236,8 +237,8 @@ public class ConsultasDAO {
 
     }
 
-    ///////////////////////////////////////DETALLE_ORDENES////////////////////////////////////////////////////////
-    public List<DatosDTO> consultarDetalle() throws Exception{
+///////////////////////////////////////DETALLE_ORDENES////////////////////////////////////////////////////////
+    public List<DatosDTO> consultarDetalle() throws Exception {
         List<DatosDTO> detalle = new ArrayList<DatosDTO>();
 
         try {
@@ -267,7 +268,7 @@ public class ConsultasDAO {
                 }
             }
         }
-       
+
         System.out.println("El tamaño de la lista" + detalle.size());
         return detalle;
     }
@@ -278,14 +279,13 @@ public class ConsultasDAO {
 
             if (detalle.getOrden_id() != null && detalle.getProducto_id() != null && detalle.getCantidad() != null && detalle.getPrecio() != null) {
 
-                String query = "INSERT INTO detalles_ordenes (orden_id, producto_id, cantidad, precio) VALUES (" + detalle.getOrden_id() + ","+detalle.getProducto_id()+"," + detalle.getCantidad()+","+detalle.getPrecio()+")";
+                String query = "INSERT INTO detalles_ordenes (orden_id, producto_id, cantidad, precio) VALUES (" + detalle.getOrden_id() + "," + detalle.getProducto_id() + "," + detalle.getCantidad() + "," + detalle.getPrecio() + ")";
                 //String query="INSERT INTO clientes VALUES ('"+cliente.getNombre()+"','"+cliente.getCorreo()+"','"+cliente.getDireccion()+"','"+cliente.getTelefono()+"')";
                 //String query = "INSERT INTO clientes VALUES (6, 'isai', 'isaimixia18@gmail.com','Santa Luxia', '48407205')";  
                 Statement s = con.conexionMysql().createStatement();
                 s.executeUpdate(query);
 
                 System.out.println("La consulta es: " + query);
-
             }
 
         } catch (Exception e) {
@@ -305,18 +305,18 @@ public class ConsultasDAO {
             query += "orden_id=orden_id, "; // Keep the existing value
         }
 
-        if (detalle.getProducto_id() != null){
-            query += "producto_id=" + detalle.getProducto_id()+ ",";
+        if (detalle.getProducto_id() != null) {
+            query += "producto_id=" + detalle.getProducto_id() + ",";
         } else {
             query += "producto_id=producto_id, "; // Keep the existing value
         }
 
         if (detalle.getCantidad() != null) {
-            query += "cantidad=" + detalle.getCantidad()+",";
+            query += "cantidad=" + detalle.getCantidad() + ",";
         } else {
             query += "cantidad=cantidad,"; // Keep the existing value
         }
-        
+
         if (detalle.getPrecio() != null) {
             query += "precio=" + detalle.getPrecio();
         } else {
@@ -348,6 +348,122 @@ public class ConsultasDAO {
 
         } catch (SQLException ex) {
             throw new SQLException("Error al eliminar la orden: " + ex.getMessage());
+        }
+
+        System.out.println("Consulta para eliminar: " + query);
+    }
+////////////////////////////////////////////PRODUCTOS//////////////////////////////////////////////////////
+
+    public List<DatosDTO> consultarProductos() throws Exception {
+        List<DatosDTO> productos = new ArrayList<DatosDTO>();
+
+        try {
+            String query = "SELECT id, nombre, descripcion, precio, cantidad FROM productos";
+            Statement s = con.conexionMysql().createStatement();
+            ResultSet r = s.executeQuery(query);
+
+            while (r.next()) {
+                DatosDTO dato = new DatosDTO();
+                dato.setId(r.getLong("id"));
+                dato.setNombre(r.getString("nombre"));
+                dato.setDescripcion(r.getString("descripcion"));
+                dato.setPrecio(r.getLong("precio"));
+                dato.setCantidad(r.getLong("cantidad"));
+
+                productos.add(dato);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al consultar productos");
+        } finally {
+            if (con != null) {
+                try {
+                    con.conexionMysql().close();
+                    System.out.println("Cierre de conexion exitosa");
+                } catch (SQLException ex) {
+                    System.out.println("Error al cerrar conexion");
+                }
+            }
+        }
+
+        System.out.println("El tamaño de la lista" + productos.size());
+        return productos;
+    }
+
+    public void insertarProducto(DatosDTO producto) {
+
+        try {
+            if (!producto.getNombre().isEmpty() && !producto.getDescripcion().isEmpty() && producto.getPrecio() != null && producto.getCantidad() != null) {
+
+                String query = "INSERT INTO productos (nombre, descripcion, precio, cantidad) VALUES ('" + producto.getNombre() + "','" + producto.getDescripcion() + "'," + producto.getPrecio() + "," + producto.getCantidad() + ")";
+                //String query="INSERT INTO clientes VALUES ('"+cliente.getNombre()+"','"+cliente.getCorreo()+"','"+cliente.getDireccion()+"','"+cliente.getTelefono()+"')";
+                //String query = "INSERT INTO clientes VALUES (6, 'isai', 'isaimixia18@gmail.com','Santa Luxia', '48407205')";  
+                Statement s = con.conexionMysql().createStatement();
+                s.executeUpdate(query);
+                System.out.println("La consulta es: " + query);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error al insertar Orden");
+        }
+
+        
+
+    }
+
+    public void actualizarProducto(DatosDTO producto) {
+
+        //String query="INSERT INTO clientes VALUES ("+pDatos.getId()+",'"+pDatos.getNombre()+"','"+pDatos.getCorreo()+"','"+pDatos.getDireccion()+"','"+pDatos.getTelefono()+"')";
+        String query = "UPDATE productos SET ";
+
+        if (!producto.getNombre().isEmpty()) {
+            query += "nombre='" + producto.getNombre() + "',";
+        } else {
+            query += "nombre=nombre,"; // Keep the existing value
+        }
+
+        if (!producto.getDescripcion().isEmpty()) {
+            query += "descripcion='" + producto.getDescripcion() + "',";
+        } else {
+            query += "descripcion=descripcion,"; // Keep the existing value
+        }
+
+        if (producto.getPrecio() != null) {
+            query += "precio=" + producto.getPrecio() + ",";
+        } else {
+            query += "precio=precio,"; // Keep the existing value
+        }
+
+        if (producto.getCantidad() != null) {
+            query += "cantidad=" + producto.getCantidad();
+        } else {
+            query += "cantidad=cantidad,"; // Keep the existing value
+        }
+
+        query += " WHERE id=" + producto.getId();
+
+        try {
+
+            Statement s = con.conexionMysql().createStatement();
+            s.executeUpdate(query);
+
+        } catch (Exception e) {
+            System.out.println("Error al actualiz el producto");
+        }
+
+        System.out.println("Consulta Actualizar para producto: " + query);
+    }
+
+    public void eliminarProducto(DatosDTO producto) throws Exception {
+
+        String query = "DELETE FROM productos WHERE id =" + producto.getId();
+
+        try {
+
+            Statement s = con.conexionMysql().createStatement();
+            s.executeUpdate(query);
+
+        } catch (SQLException ex) {
+            throw new SQLException("Error al eliminar el producto: " + ex.getMessage());
         }
 
         System.out.println("Consulta para eliminar: " + query);
