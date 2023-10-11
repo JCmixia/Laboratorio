@@ -72,9 +72,6 @@
             <artifactId>hibernate-jpa-2.1-api</artifactId>
             <version>1.0.2.Final</version>
         </dependency>
-
-
-
     </dependencies>
 
     <build>
@@ -89,7 +86,6 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-
             <!-- Plugin de empaquetado WAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -101,7 +97,6 @@
             </plugin>
         </plugins>
     </build>
-
     <!-- Configuración de distribución para desplegar artefactos -->
     <distributionManagement>
         <repository>
@@ -109,7 +104,6 @@
             <url>http://localhost:8085/repository/local.demo.rep/</url>
         </repository>
     </distributionManagement>
-
     <!-- Configuración de repositorios para resolver dependencias y plugins -->
     <repositories>
         <repository>
