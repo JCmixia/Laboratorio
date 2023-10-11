@@ -11,10 +11,7 @@ import javax.faces.bean.ManagedBean;
  * @author Isai
  */
 public class DatosDTO {
-
-   
-
-   
+  
     private Long id;
     private String nombre;
     private String correo;

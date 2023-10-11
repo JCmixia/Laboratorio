@@ -406,8 +406,6 @@ public class ConsultasDAO {
             System.out.println("Error al insertar Orden");
         }
 
-        
-
     }
 
     public void actualizarProducto(DatosDTO producto) {
