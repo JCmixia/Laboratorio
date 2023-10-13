@@ -113,7 +113,6 @@
     </repositories>
 
     <pluginRepositories>
-        
         <pluginRepository>
             <id>local.demo.rep</id>
             <name>local.demo.repo</name>

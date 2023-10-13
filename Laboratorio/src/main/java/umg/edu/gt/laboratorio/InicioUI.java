@@ -25,7 +25,9 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import umg.edu.gt.DAO.ConexionDAO;
 import umg.edu.gt.DAO.ConsultasDAO;
+import umg.edu.gt.DAO.ConsultasHB;
 import umg.edu.gt.DTO.DatosDTO;
+import umg.edu.gt.DTO.Cliente;
 
 /**
  *
@@ -36,7 +38,6 @@ import umg.edu.gt.DTO.DatosDTO;
 @ViewScoped
 public class InicioUI implements Serializable {
 
-  
     private String mensaje;
 
     private String dato1;
@@ -53,15 +54,15 @@ public class InicioUI implements Serializable {
     private String dato10;
     private String dato11;
     private String dato12;
-    
+
     private String dato13;
     private String dato14;
     private String dato15;
 
-    private DatosDTO datos;
+    private Cliente datos;
 
     private boolean band;
-    private List<DatosDTO> clientes = new ArrayList<DatosDTO>();
+    private List<Cliente> clientes = new ArrayList<Cliente>();
     private List<DatosDTO> ordenes = new ArrayList<DatosDTO>();
     private List<DatosDTO> detalle_ordenes = new ArrayList<DatosDTO>();
     private List<DatosDTO> productos = new ArrayList<DatosDTO>();
@@ -71,10 +72,12 @@ public class InicioUI implements Serializable {
 
         ConexionDAO con = new ConexionDAO();
         ConsultasDAO consulta = new ConsultasDAO();
+        ConsultasHB consul = new ConsultasHB();
 
         try {
 
-            setClientes(consulta.consultarCliente());
+            //setClientes(consulta.consultarCliente());
+            setClientes(consul.consultarCliente());
             setOrdenes(consulta.consultarOrdenes());
             setDetalle_ordenes(consulta.consultarDetalle());
             setProductos(consulta.consultarProductos());
@@ -96,17 +99,20 @@ public class InicioUI implements Serializable {
         ConsultasDAO consulta = new ConsultasDAO();
 
         try {
-            setClientes(consulta.consultarCliente());
+            //setClientes(consulta.consultarCliente());
         } catch (Exception ex) {
             System.out.println("Error de la conexion" + ex);
         }
 
     }
 /////////////////////////////////////CLIENTES///////////////////////////////////////////////////////////////
+
     public void accionesCliente(int opt) throws Exception {
 
         ConexionDAO con = new ConexionDAO();
         ConsultasDAO consulta = new ConsultasDAO();
+        ConsultasHB consultaHB = new ConsultasHB();
+
         DatosDTO cliente = new DatosDTO();
 
         try {
@@ -119,20 +125,24 @@ public class InicioUI implements Serializable {
             switch (opt) {
                 case 1:
                     //consulta.insertarCliente(cliente);
-                    consulta.crearCliente(cliente);
-                    System.out.println("Respuesta cliente: "+ consulta.crearCliente(cliente));
+                    //consultaHB.crearCliente(cliente);
+                    System.out.println("Respuesta insertar cliente: " + consultaHB.crearCliente(cliente));
                     break;
                 case 2:
                     cliente.setId(Long.parseLong(dato1));
-                    consulta.actualizarCliente(cliente);
+                    //consulta.actualizarCliente(cliente);
+                    //consultaHB.modificarCliente(cliente);
+                    System.out.println("Respuesta actualizacio cliente: " + consultaHB.modificarCliente(cliente));
                     break;
                 case 3:
                     cliente.setId(Long.parseLong(dato1));
-                    consulta.eliminarCliente(cliente);
+                    System.out.println("Respuesta actualizacio cliente: " + consultaHB.eliminarCliente(cliente));
                     break;
             }
 
-            setClientes(consulta.consultarCliente());
+            //setClientes(consulta.consultarCliente());
+            setClientes(consultaHB.consultarCliente());
+            System.out.println("Resultado de consulta: " + consultaHB.consultarCliente());
 
             System.out.println("la conexion es: " + con.conexionMysql());
             System.out.println("La lista de clientes es: " + getClientes().size());
@@ -279,8 +289,9 @@ public class InicioUI implements Serializable {
         }
 
     }
+
     //////////////////////////////////////////////PRODUCTOS//////////////////////////////////////////////
-     public void accionesProductos(int opt) throws Exception {
+    public void accionesProductos(int opt) throws Exception {
 
         ConexionDAO con = new ConexionDAO();
         ConsultasDAO consulta = new ConsultasDAO();
@@ -328,8 +339,7 @@ public class InicioUI implements Serializable {
             dato13 = "";
             dato14 = "";
             dato15 = "";
-            
-            
+
             band = false;
         } catch (Exception ex) {
             System.out.println("Error de la accion de detalle_ordenes" + ex);
@@ -345,8 +355,7 @@ public class InicioUI implements Serializable {
         }
 
     }
-    
-     
+
     /**
      * @return the productos
      */
@@ -361,7 +370,6 @@ public class InicioUI implements Serializable {
         this.productos = productos;
     }
 
-    
     /**
      * @return the dato12
      */
@@ -463,6 +471,43 @@ public class InicioUI implements Serializable {
     /**
      * @param mensaje the mensaje to set
      */
+    public void onRowSelect(SelectEvent event) {
+        datos = (Cliente) event.getObject();
+
+        dato1 = Long.toString(datos.getId());
+        dato2 = datos.getNombre();
+        dato3 = datos.getCorreo();
+        dato4 = datos.getDireccion();
+        dato5 = datos.getTelefono();
+        /*
+        dato8 = datos.getFecha();
+
+        if (datos.getCliente_id() != null && datos.getTotal() != null) {
+            dato6 = Long.toString(datos.getCliente_id());
+            dato7 = Long.toString(datos.getTotal());
+        }
+
+        if (datos.getOrden_id() != null && datos.getProducto_id() != null  && datos.getCantidad() != null && datos.getPrecio() != null) {
+            dato9 = Long.toString(datos.getOrden_id());
+            dato10 = Long.toString(datos.getProducto_id());
+            dato11 = Long.toString(datos.getCantidad());
+            dato12 = Long.toString(datos.getPrecio());
+        }
+        
+        if (datos.getCantidad() != null && datos.getPrecio() != null){
+            dato11 = Long.toString(datos.getCantidad());
+            dato12 = Long.toString(datos.getPrecio());
+        }
+        
+        dato13 = datos.getDescripcion();
+         */
+        band = true;
+
+        System.out.println("ELEMENTO SELECCIONADO---------------------------");
+
+    }
+
+    /*
     //Cuando se selecciona un dato
     public void onRowSelect(SelectEvent event) {
         datos = (DatosDTO) event.getObject();
@@ -495,9 +540,12 @@ public class InicioUI implements Serializable {
         dato13 = datos.getDescripcion();
         
         band = true;
+        
+        
+        System.out.println("ELEMENTO SELECCIONADO---------------------------");
 
     }
-
+     */
     public void onRowUnselect(UnselectEvent event) {
         dato1 = "";
         dato2 = "";
@@ -506,8 +554,8 @@ public class InicioUI implements Serializable {
         dato5 = "";
 
     }
-    
-     /**
+
+    /**
      * @return the dato13
      */
     public String getDato13() {
@@ -580,14 +628,14 @@ public class InicioUI implements Serializable {
     /**
      * @return the datos
      */
-    public DatosDTO getDatos() {
+    public Cliente getDatos() {
         return datos;
     }
 
     /**
      * @param datos the datos to set
      */
-    public void setDatos(DatosDTO datos) {
+    public void setDatos(Cliente datos) {
         this.datos = datos;
     }
 
@@ -661,14 +709,14 @@ public class InicioUI implements Serializable {
     /**
      * @return the lista
      */
-    public List<DatosDTO> getClientes() {
+    public List<Cliente> getClientes() {
         return clientes;
     }
 
     /**
      * @param lista the lista to set
      */
-    public void setClientes(List<DatosDTO> lista) {
+    public void setClientes(List<Cliente> lista) {
         this.clientes = lista;
     }
 

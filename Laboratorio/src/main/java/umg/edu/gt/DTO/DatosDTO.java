@@ -4,12 +4,13 @@
  */
 package umg.edu.gt.DTO;
 
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 /**
  *
  * @author Isai
  */
-public class DatosDTO {
+public class DatosDTO implements Serializable{
   
     private Long id;
     private String nombre;
