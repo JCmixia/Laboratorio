@@ -11,7 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.PersistenceException;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 import umg.edu.gt.DTO.DatosDTO;
+import umg.edu.gt.Entidades.Cliente;
 
 /**
  *
@@ -465,6 +472,32 @@ public class ConsultasDAO {
         }
 
         System.out.println("Consulta para eliminar: " + query);
+    }
+
+    public String crearCliente(DatosDTO cliente) {
+    
+        System.out.println("Ingresando al metodo crear cliente");
+        SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Cliente.class).buildSessionFactory();
+
+        Session session = sessionFactory.openSession();
+
+        try {
+
+            Cliente client = new Cliente(cliente.getNombre(), cliente.getCorreo(), cliente.getDireccion(), cliente.getTelefono());
+
+            session.beginTransaction();
+            //session.save(client);
+            session.persist(client);
+
+            session.getTransaction().commit();
+            
+            session.close();
+            
+            return "Usuario creado";
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            return "error al registrar usuario: "+ e.getStackTrace();
+        } 
     }
 }
 //Tener archiva listo

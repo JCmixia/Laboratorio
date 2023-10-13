@@ -5,7 +5,6 @@
 package umg.edu.gt.DTO;
 
 import javax.faces.bean.ManagedBean;
-
 /**
  *
  * @author Isai

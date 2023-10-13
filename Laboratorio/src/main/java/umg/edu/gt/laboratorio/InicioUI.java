@@ -118,7 +118,9 @@ public class InicioUI implements Serializable {
 
             switch (opt) {
                 case 1:
-                    consulta.insertarCliente(cliente);
+                    //consulta.insertarCliente(cliente);
+                    consulta.crearCliente(cliente);
+                    System.out.println("Respuesta cliente: "+ consulta.crearCliente(cliente));
                     break;
                 case 2:
                     cliente.setId(Long.parseLong(dato1));
