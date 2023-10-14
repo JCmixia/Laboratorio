@@ -1,0 +1,9 @@
+umg\edu\gt\DTO\Producto.class
+umg\edu\gt\DTO\Cliente.class
+umg\edu\gt\DAO\ConexionDAO.class
+umg\edu\gt\DAO\ConsultasDAO.class
+umg\edu\gt\DTO\Orden.class
+umg\edu\gt\DAO\ConsultasHB.class
+umg\edu\gt\DTO\DatosDTO.class
+umg\edu\gt\laboratorio\InicioUI.class
+umg\edu\gt\DTO\Detalle_orden.class
