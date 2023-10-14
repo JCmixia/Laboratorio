@@ -21,6 +21,7 @@ import javax.persistence.Table;
 @Entity
 @Table (name = "ordenes")
 public class Orden implements Serializable {   
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name = "id")

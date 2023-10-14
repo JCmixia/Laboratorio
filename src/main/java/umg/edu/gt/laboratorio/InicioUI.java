@@ -45,7 +45,6 @@ import umg.edu.gt.DTO.Producto;
 @ViewScoped
 public class InicioUI implements Serializable {
 
-
     private String mensaje;
 
     private String dato1;
@@ -81,33 +80,20 @@ public class InicioUI implements Serializable {
     @PostConstruct
     public void init() {
 
-        ConexionDAO con = new ConexionDAO();
-        ConsultasDAO consulta = new ConsultasDAO();
         ConsultasHB consultaHB = new ConsultasHB();
 
         try {
-
             setClientes(consultaHB.consultarCliente());
             setOrdenes(consultaHB.consultarOrden());
             setDetalleOrdenes(consultaHB.consultarDetalle());
             setProductos(consultaHB.consultarProducto());
-            System.out.println("La conexion es:" + con.conexionMysql());
-            System.out.println("La lista es: " + getClientes().size());
-            System.out.println("El nombre es " + getClientes().get(0).getNombre());
-
         } catch (Exception e) {
-            System.out.println("Error de Conexionn");
+            System.out.println("Error al arrancar");
         }
     }
 
-    /**
-     * @return the mensaje
-     */
 //-----------------------------------------CLIENTES----------------------------------------------------------------
     public void accionesCliente(int opt) throws Exception {
-
-        ConexionDAO con = new ConexionDAO();
-        ConsultasDAO consulta = new ConsultasDAO();
         ConsultasHB consultaHB = new ConsultasHB();
 
         DatosDTO cliente = new DatosDTO();
@@ -134,38 +120,23 @@ public class InicioUI implements Serializable {
             }
 
             setClientes(consultaHB.consultarCliente());
-            System.out.println("Resultado de consulta: " + consultaHB.consultarCliente());
-
-            System.out.println("la conexion es: " + con.conexionMysql());
-            System.out.println("La lista de clientes es: " + getClientes().size());
-            System.out.println("El nombre es: " + getClientes().get(0).getNombre());
-
+            
             dato1 = "";
             dato2 = "";
             dato3 = "";
             dato4 = "";
             dato5 = "";
             band = false;
+            
         } catch (Exception ex) {
             System.out.println("Error de la accion de cliente" + ex);
-        } finally {
-            if (con != null) {
-                try {
-                    con.conexionMysql().close();
-                    System.out.println("Cierre de conexion exitosa");
-                } catch (SQLException ex) {
-                    System.out.println("Error al cerrar conexion" + ex.getMessage());
-                }
-            }
-        }
+        } 
 
     }
 
 //------------------------------------------ORDENES-------------------------------------------------------------
     public void accionesOrdenes(int opt) throws Exception {
 
-        ConexionDAO con = new ConexionDAO();
-        ConsultasDAO consulta = new ConsultasDAO();
         ConsultasHB consultaHB = new ConsultasHB();
         DatosDTO orden = new DatosDTO();
 
@@ -177,7 +148,7 @@ public class InicioUI implements Serializable {
 
             switch (opt) {
                 case 1:
-                    //consulta.insertarOrden(orden);
+
                     consultaHB.crearOrden(orden);
                     break;
                 case 2:
@@ -189,12 +160,8 @@ public class InicioUI implements Serializable {
                     consultaHB.eliminarOrden(orden);
                     break;
             }
-
+            
             setOrdenes(consultaHB.consultarOrden());
-            System.out.println("Resultado de consulta ordenes:" + consultaHB.consultarOrden());
-            System.out.println("la conexion es: " + con.conexionMysql());
-            System.out.println("La lista de clientes es: " + getClientes().size());
-            System.out.println("El nombre es: " + getClientes().get(0).getNombre());
 
             dato1 = "";
             dato2 = "";
@@ -208,24 +175,13 @@ public class InicioUI implements Serializable {
             band = false;
         } catch (Exception ex) {
             System.out.println("Error de la accion de cliente" + ex);
-        } finally {
-            if (con != null) {
-                try {
-                    con.conexionMysql().close();
-                    System.out.println("Cierre de conexion exitosa");
-                } catch (SQLException ex) {
-                    System.out.println("Error al cerrar conexion" + ex.getMessage());
-                }
-            }
-        }
+        } 
 
     }
 
-    /////////////////////////////////////////DETALLE_ORDENES////////////////////////////////////////////////
+//------------------------------------------DETALLE_ORDENES-------------------------------------------------
     public void accionesDetalle_ordenes(int opt) throws Exception {
 
-        ConexionDAO con = new ConexionDAO();
-        ConsultasDAO consulta = new ConsultasDAO();
         ConsultasHB consultaHB = new ConsultasHB();
         DatosDTO detalle = new DatosDTO();
 
@@ -238,25 +194,20 @@ public class InicioUI implements Serializable {
 
             switch (opt) {
                 case 1:
-                    consulta.insertarDetalle(detalle);
-             
+                    
+                    consultaHB.crearDetalle(detalle);
                     break;
                 case 2:
-                    detalle.setId(Long.parseLong(dato1));
-                  
+                    detalle.setId(Long.parseLong(dato1)); 
                     consultaHB.modificarDetalle(detalle);
                     break;
                 case 3:
                     detalle.setId(Long.parseLong(dato1));
-                    consulta.eliminarDetalle(detalle);
+                    consultaHB.eliminarDetalle(detalle);
                     break;
             }
 
-           
             setDetalleOrdenes(consultaHB.consultarDetalle());
-            System.out.println("la conexion es: " + con.conexionMysql());
-            System.out.println("La lista de clientes es: " + getClientes().size());
-            System.out.println("El nombre es: " + getClientes().get(0).getNombre());
 
             dato1 = "";
             dato2 = "";
@@ -274,16 +225,7 @@ public class InicioUI implements Serializable {
             band = false;
         } catch (Exception ex) {
             System.out.println("Error de la accion de detalle_ordenes" + ex);
-        } finally {
-            if (con != null) {
-                try {
-                    con.conexionMysql().close();
-                    System.out.println("Cierre de conexion exitosa");
-                } catch (SQLException ex) {
-                    System.out.println("Error al cerrar conexion" + ex.getMessage());
-                }
-            }
-        }
+        } 
     }
 
     //////////////////////////////////////////////PRODUCTOS//////////////////////////////////////////////
@@ -304,12 +246,13 @@ public class InicioUI implements Serializable {
 
             switch (opt) {
                 case 1:
-                    //consulta.insertarProducto(producto);
+
                     consultaHB.crearProducto(producto);
                     break;
                 case 2:
+                    
                     producto.setId(Long.parseLong(dato1));
-                    //consulta.actualizarProducto(producto);
+                    System.out.println("Id producto: " + producto.getId());
                     consultaHB.modificarProducto(producto);
                     break;
                 case 3:
@@ -319,12 +262,7 @@ public class InicioUI implements Serializable {
                     break;
             }
 
-            //setProductos(consulta.consultarProductos());
             setProductos(consultaHB.consultarProducto());
-
-            System.out.println("la conexion es: " + con.conexionMysql());
-            System.out.println("La lista de clientes es: " + getClientes().size());
-            System.out.println("El nombre es: " + getClientes().get(0).getNombre());
 
             dato1 = "";
             dato2 = "";
@@ -344,17 +282,72 @@ public class InicioUI implements Serializable {
 
             band = false;
         } catch (Exception ex) {
-            System.out.println("Error de la accion de detalle_ordenes" + ex);
-        } finally {
-            if (con != null) {
-                try {
-                    con.conexionMysql().close();
-                    System.out.println("Cierre de conexion exitosa");
-                } catch (SQLException ex) {
-                    System.out.println("Error al cerrar conexion" + ex.getMessage());
-                }
-            }
-        }
+            System.out.println("UnicioUI Error de la accion de Productos" + ex);
+        } 
+
+    }
+    
+     public void clienteSeleccionado(SelectEvent event) {
+        cliente = (Cliente) event.getObject();
+
+        //datos cliente
+        dato1 = Long.toString(getCliente().getId());
+        dato2 = cliente.getNombre();
+        dato3 = cliente.getCorreo();
+        dato4 = cliente.getDireccion();
+        dato5 = cliente.getTelefono();
+
+        band = true;
+
+    }
+
+    public void ordenSeleccionada(SelectEvent event) {
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        String fechaFormateada;
+
+        orden = (Orden) event.getObject();
+
+        dato1 = Long.toString(orden.getId());      
+        dato6 = Long.toString(orden.getCliente_id());
+        dato7 = Long.toString(orden.getTotal());
+
+        fechaFormateada = formato.format(orden.getFecha());
+        dato8 = fechaFormateada;
+
+        band = true;
+
+    }
+
+    public void detalleSeleccionado(SelectEvent event) {
+        detalle = (Detalle_orden) event.getObject();
+
+        dato1 = Long.toString(detalle.getId());
+        dato9 = Long.toString(detalle.getOrden_id());
+        dato10 = Long.toString(detalle.getProducto_id());
+        dato11 = Long.toString(detalle.getCantidad());
+        dato12 = Long.toString(detalle.getPrecio());
+      
+        band = true;
+    }
+    
+    public void productoSeleccionado(SelectEvent event) {
+        producto = (Producto) event.getObject();
+
+        dato1 = Long.toString(producto.getId());
+        dato2 = producto.getNombre();
+        dato13 = producto.getDescripcion();
+        dato12 = Long.toString(producto.getPrecio());
+        dato11 = Long.toString(producto.getCantidad());
+      
+        band = true;
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+        dato1 = "";
+        dato2 = "";
+        dato3 = "";
+        dato4 = "";
+        dato5 = "";
 
     }
 
@@ -498,74 +491,6 @@ public class InicioUI implements Serializable {
         this.detalleOrdenes = detalleOrdenes;
     }
 
-    /**
-     * @param mensaje the mensaje to set
-     */
-    public void clienteSeleccionado(SelectEvent event) {
-        cliente = (Cliente) event.getObject();
-
-        //datos cliente
-        dato1 = Long.toString(getCliente().getId());
-        dato2 = cliente.getNombre();
-        dato3 = cliente.getCorreo();
-        dato4 = cliente.getDireccion();
-        dato5 = cliente.getTelefono();
-
-        band = true;
-
-    }
-
-    public void ordenSeleccionada(SelectEvent event) {
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-        String fechaFormateada;
-
-        orden = (Orden) event.getObject();
-
-        dato1 = Long.toString(orden.getId());
-        dato6 = Long.toString(orden.getCliente_id());
-        dato7 = Long.toString(orden.getTotal());
-
-        fechaFormateada = formato.format(orden.getFecha());
-        dato8 = fechaFormateada;
-
-        band = true;
-
-    }
-
-    public void detalleSeleccionado(SelectEvent event) {
-        detalle = (Detalle_orden) event.getObject();
-
-        dato1 = Long.toString(detalle.getId());
-        dato9 = Long.toString(detalle.getOrden_id());
-        dato10 = Long.toString(detalle.getProducto_id());
-        dato11 = Long.toString(detalle.getCantidad());
-        dato12 = Long.toString(detalle.getPrecio());
-      
-        band = true;
-    }
-    
-    public void productoSeleccionado(SelectEvent event) {
-        producto = (Producto) event.getObject();
-
-        dato1 = Long.toString(producto.getId());
-        dato2 = producto.getNombre();
-        dato13 = producto.getDescripcion();
-        dato12 = Long.toString(producto.getPrecio());
-        dato11 = Long.toString(producto.getCantidad());
-      
-        band = true;
-    }
-
-    public void onRowUnselect(UnselectEvent event) {
-        dato1 = "";
-        dato2 = "";
-        dato3 = "";
-        dato4 = "";
-        dato5 = "";
-
-    }
-    
-    
     /**
      * @return the producto
      */

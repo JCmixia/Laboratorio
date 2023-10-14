@@ -20,8 +20,6 @@ import javax.persistence.Table;
 @Table(name = "detalles_ordenes")
 public class Detalle_orden implements Serializable {
 
-   
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

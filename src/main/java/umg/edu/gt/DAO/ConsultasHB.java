@@ -145,7 +145,6 @@ public class ConsultasHB {
         return "Cliente eliminado exitosamente";
     }
 
-    
 //----------------------------------------ORDENES-------------------------------------------------------------    
     public List<Orden> consultarOrden() {
 
@@ -183,17 +182,19 @@ public class ConsultasHB {
         SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Orden.class).buildSessionFactory();
 
         Session session = sessionFactory.openSession();
-
+        System.out.println("Objeto ordenes: " + orden.getId() + "-" + orden.getCliente_id() + "-" + fecha + "-" + orden.getTotal());
         try {
 
             Orden ordenHb = new Orden(orden.getCliente_id(), fecha, orden.getTotal());
 
             session.beginTransaction();
-            //session.save(client);
+
             try {
+                
                 session.persist(ordenHb);
             } catch (Exception e) {
-                System.out.println("ConsultasHB 193 error al guardar la orden");
+                System.out.println("ConsultasHB 196 error al guardar orden");
+                return 2;
             }
 
             session.getTransaction().commit();
@@ -207,7 +208,7 @@ public class ConsultasHB {
         }
     }
 
-    public String modificarOrden(DatosDTO orden){
+    public String modificarOrden(DatosDTO orden) {
 
         System.out.println("Ingresando al metodo modificar cliente");
         SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Orden.class).buildSessionFactory();
@@ -337,7 +338,7 @@ public class ConsultasHB {
         }
     }
 
-    public String modificarDetalle(DatosDTO detalle){
+    public String modificarDetalle(DatosDTO detalle) {
 
         System.out.println("Ingresando al metodo modificar cliente");
         SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Detalle_orden.class).buildSessionFactory();
@@ -350,12 +351,11 @@ public class ConsultasHB {
             transaction = session.beginTransaction();
 
             Detalle_orden detalle1 = session.get(Detalle_orden.class, detalle.getId());
-            
+
             detalle1.setOrden_id(detalle.getOrden_id());
             detalle1.setProducto_id(detalle.getProducto_id());
             detalle1.setCantidad(detalle.getCantidad());
             detalle1.setPrecio(detalle.getPrecio());
-
 
             session.update(detalle1);
             //session.save(client);
@@ -405,7 +405,7 @@ public class ConsultasHB {
         }
         return "Detalle eliminado exitosamente";
     }
-    
+
     //--------------------------------------PRODUCTO-------------------------------------------------------------    
     public List<Producto> consultarProducto() {
 
@@ -459,7 +459,7 @@ public class ConsultasHB {
         }
     }
 
-    public String modificarProducto(DatosDTO producto){
+    public String modificarProducto(DatosDTO producto) {
 
         System.out.println("Ingresando al metodo modificar cliente");
         SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Producto.class).buildSessionFactory();
@@ -472,12 +472,12 @@ public class ConsultasHB {
             transaction = session.beginTransaction();
 
             Producto prod = session.get(Producto.class, producto.getId());
-            
+
             prod.setNombre(producto.getNombre());
             prod.setDescripcion(producto.getDescripcion());
             prod.setPrecio(producto.getPrecio());
             prod.setCantidad(producto.getCantidad());
-            
+
             session.update(prod);
             //session.save(client);
             transaction.commit();
