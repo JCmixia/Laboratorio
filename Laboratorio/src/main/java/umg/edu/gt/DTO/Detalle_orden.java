@@ -17,25 +17,15 @@ import javax.persistence.Table;
  * @author Isai
  */
 @Entity
-@Table(name = "detalle_ordenes")
+@Table(name = "detalles_ordenes")
 public class Detalle_orden implements Serializable {
+
+   
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
-    public Detalle_orden() {
-        
-    }
-
-    public Detalle_orden(Long id, Long orden_id, Long producto_id, Long cantidad, Long precio) {
-        this.id = id;
-        this.orden_id = orden_id;
-        this.producto_id = producto_id;
-        this.cantidad = cantidad;
-        this.precio = precio;
-    }
 
     @Column(name = "orden_id")
     private Long orden_id;
@@ -49,6 +39,24 @@ public class Detalle_orden implements Serializable {
     @Column(name = "precio")
     private Long precio;
 
+    public Detalle_orden() {
+
+    }
+
+    public Detalle_orden(Long orden_id, Long producto_id, Long cantidad, Long precio) {
+        this.orden_id = orden_id;
+        this.producto_id = producto_id;
+        this.cantidad = cantidad;
+        this.precio = precio;
+    }
+
+     /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     /**
      * @return the id
      */
@@ -82,6 +90,34 @@ public class Detalle_orden implements Serializable {
      */
     public Long getPrecio() {
         return precio;
+    }
+
+    /**
+     * @param orden_id the orden_id to set
+     */
+    public void setOrden_id(Long orden_id) {
+        this.orden_id = orden_id;
+    }
+
+    /**
+     * @param producto_id the producto_id to set
+     */
+    public void setProducto_id(Long producto_id) {
+        this.producto_id = producto_id;
+    }
+
+    /**
+     * @param cantidad the cantidad to set
+     */
+    public void setCantidad(Long cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    /**
+     * @param precio the precio to set
+     */
+    public void setPrecio(Long precio) {
+        this.precio = precio;
     }
 
 }

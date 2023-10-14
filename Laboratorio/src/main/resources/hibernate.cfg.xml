@@ -9,6 +9,9 @@
     <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
     <property name="hibernate.show_sql">true</property>
     <mapping class="umg.edu.gt.DTO.Cliente"/>
+	<mapping class="umg.edu.gt.DTO.Detalle_orden"/>
+	<mapping class="umg.edu.gt.DTO.Orden"/>
+	<mapping class="umg.edu.gt.DTO.Producto"/>
    </session-factory>
   
  </hibernate-configuration>

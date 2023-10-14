@@ -58,8 +58,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
         </div>
         <br></br>
         
-        <p:dataTable id="tblLista" value="#{bkn_Inicio.clientes}" var="item" selection="#{bkn_Inicio.datos}" rowKey="#{item.id}" lazy="true" selectionMode="single">
-            <p:ajax event="rowSelect" listener="#{bkn_Inicio.onRowSelect}" update="formulario1"/>
+        <p:dataTable id="tblLista" value="#{bkn_Inicio.clientes}" var="item" selection="#{bkn_Inicio.cliente}" rowKey="#{item.id}" lazy="true" selectionMode="single">
+            <p:ajax event="rowSelect" listener="#{bkn_Inicio.clienteSeleccionado}" update="formulario1"/>
             <p:ajax event="rowUnselect" listener="#{bkn_Inicio.onRowUnselect}" update="formulario1"/>
             <p:column>
                 <f:facet name="header">

@@ -11,13 +11,17 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
 import java.sql.SQLException;
+
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import java.net.http.HttpClient;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -28,6 +32,9 @@ import umg.edu.gt.DAO.ConsultasDAO;
 import umg.edu.gt.DAO.ConsultasHB;
 import umg.edu.gt.DTO.DatosDTO;
 import umg.edu.gt.DTO.Cliente;
+import umg.edu.gt.DTO.Detalle_orden;
+import umg.edu.gt.DTO.Orden;
+import umg.edu.gt.DTO.Producto;
 
 /**
  *
@@ -37,6 +44,7 @@ import umg.edu.gt.DTO.Cliente;
 @ManagedBean(name = "bkn_Inicio")
 @ViewScoped
 public class InicioUI implements Serializable {
+
 
     private String mensaje;
 
@@ -59,28 +67,30 @@ public class InicioUI implements Serializable {
     private String dato14;
     private String dato15;
 
-    private Cliente datos;
+    private Cliente cliente;
+    private Orden orden;
+    private Detalle_orden detalle;
+    private Producto producto;
 
     private boolean band;
     private List<Cliente> clientes = new ArrayList<Cliente>();
-    private List<DatosDTO> ordenes = new ArrayList<DatosDTO>();
-    private List<DatosDTO> detalle_ordenes = new ArrayList<DatosDTO>();
-    private List<DatosDTO> productos = new ArrayList<DatosDTO>();
+    private List<Orden> ordenes = new ArrayList<Orden>();
+    private List<Detalle_orden> detalleOrdenes = new ArrayList<Detalle_orden>();
+    private List<Producto> productos = new ArrayList<Producto>();
 
     @PostConstruct
     public void init() {
 
         ConexionDAO con = new ConexionDAO();
         ConsultasDAO consulta = new ConsultasDAO();
-        ConsultasHB consul = new ConsultasHB();
+        ConsultasHB consultaHB = new ConsultasHB();
 
         try {
 
-            //setClientes(consulta.consultarCliente());
-            setClientes(consul.consultarCliente());
-            setOrdenes(consulta.consultarOrdenes());
-            setDetalle_ordenes(consulta.consultarDetalle());
-            setProductos(consulta.consultarProductos());
+            setClientes(consultaHB.consultarCliente());
+            setOrdenes(consultaHB.consultarOrden());
+            setDetalleOrdenes(consultaHB.consultarDetalle());
+            setProductos(consultaHB.consultarProducto());
             System.out.println("La conexion es:" + con.conexionMysql());
             System.out.println("La lista es: " + getClientes().size());
             System.out.println("El nombre es " + getClientes().get(0).getNombre());
@@ -93,20 +103,7 @@ public class InicioUI implements Serializable {
     /**
      * @return the mensaje
      */
-    public void mostraClientes() throws Exception {
-        //setMensaje("Hola mundo, mi primer comentario web con jsf2");
-        ConexionDAO con = new ConexionDAO();
-        ConsultasDAO consulta = new ConsultasDAO();
-
-        try {
-            //setClientes(consulta.consultarCliente());
-        } catch (Exception ex) {
-            System.out.println("Error de la conexion" + ex);
-        }
-
-    }
-/////////////////////////////////////CLIENTES///////////////////////////////////////////////////////////////
-
+//-----------------------------------------CLIENTES----------------------------------------------------------------
     public void accionesCliente(int opt) throws Exception {
 
         ConexionDAO con = new ConexionDAO();
@@ -124,14 +121,10 @@ public class InicioUI implements Serializable {
 
             switch (opt) {
                 case 1:
-                    //consulta.insertarCliente(cliente);
-                    //consultaHB.crearCliente(cliente);
                     System.out.println("Respuesta insertar cliente: " + consultaHB.crearCliente(cliente));
                     break;
                 case 2:
                     cliente.setId(Long.parseLong(dato1));
-                    //consulta.actualizarCliente(cliente);
-                    //consultaHB.modificarCliente(cliente);
                     System.out.println("Respuesta actualizacio cliente: " + consultaHB.modificarCliente(cliente));
                     break;
                 case 3:
@@ -140,7 +133,6 @@ public class InicioUI implements Serializable {
                     break;
             }
 
-            //setClientes(consulta.consultarCliente());
             setClientes(consultaHB.consultarCliente());
             System.out.println("Resultado de consulta: " + consultaHB.consultarCliente());
 
@@ -169,11 +161,12 @@ public class InicioUI implements Serializable {
 
     }
 
-    /////////////////////////////////////ORDENES////////////////////////////////////////////
+//------------------------------------------ORDENES-------------------------------------------------------------
     public void accionesOrdenes(int opt) throws Exception {
 
         ConexionDAO con = new ConexionDAO();
         ConsultasDAO consulta = new ConsultasDAO();
+        ConsultasHB consultaHB = new ConsultasHB();
         DatosDTO orden = new DatosDTO();
 
         try {
@@ -184,20 +177,21 @@ public class InicioUI implements Serializable {
 
             switch (opt) {
                 case 1:
-                    consulta.insertarOrden(orden);
+                    //consulta.insertarOrden(orden);
+                    consultaHB.crearOrden(orden);
                     break;
                 case 2:
                     orden.setId(Long.parseLong(dato1));
-                    consulta.actualizarOrden(orden);
+                    consultaHB.modificarOrden(orden);
                     break;
                 case 3:
                     orden.setId(Long.parseLong(dato1));
-                    consulta.eliminarOrden(orden);
+                    consultaHB.eliminarOrden(orden);
                     break;
             }
 
-            setOrdenes(consulta.consultarOrdenes());
-
+            setOrdenes(consultaHB.consultarOrden());
+            System.out.println("Resultado de consulta ordenes:" + consultaHB.consultarOrden());
             System.out.println("la conexion es: " + con.conexionMysql());
             System.out.println("La lista de clientes es: " + getClientes().size());
             System.out.println("El nombre es: " + getClientes().get(0).getNombre());
@@ -232,6 +226,7 @@ public class InicioUI implements Serializable {
 
         ConexionDAO con = new ConexionDAO();
         ConsultasDAO consulta = new ConsultasDAO();
+        ConsultasHB consultaHB = new ConsultasHB();
         DatosDTO detalle = new DatosDTO();
 
         try {
@@ -244,10 +239,12 @@ public class InicioUI implements Serializable {
             switch (opt) {
                 case 1:
                     consulta.insertarDetalle(detalle);
+             
                     break;
                 case 2:
                     detalle.setId(Long.parseLong(dato1));
-                    consulta.actualizarDetalle(detalle);
+                  
+                    consultaHB.modificarDetalle(detalle);
                     break;
                 case 3:
                     detalle.setId(Long.parseLong(dato1));
@@ -255,8 +252,8 @@ public class InicioUI implements Serializable {
                     break;
             }
 
-            setDetalle_ordenes(consulta.consultarDetalle());
-
+           
+            setDetalleOrdenes(consultaHB.consultarDetalle());
             System.out.println("la conexion es: " + con.conexionMysql());
             System.out.println("La lista de clientes es: " + getClientes().size());
             System.out.println("El nombre es: " + getClientes().get(0).getNombre());
@@ -287,7 +284,6 @@ public class InicioUI implements Serializable {
                 }
             }
         }
-
     }
 
     //////////////////////////////////////////////PRODUCTOS//////////////////////////////////////////////
@@ -295,6 +291,8 @@ public class InicioUI implements Serializable {
 
         ConexionDAO con = new ConexionDAO();
         ConsultasDAO consulta = new ConsultasDAO();
+        ConsultasHB consultaHB = new ConsultasHB();
+        
         DatosDTO producto = new DatosDTO();
 
         try {
@@ -306,19 +304,23 @@ public class InicioUI implements Serializable {
 
             switch (opt) {
                 case 1:
-                    consulta.insertarProducto(producto);
+                    //consulta.insertarProducto(producto);
+                    consultaHB.crearProducto(producto);
                     break;
                 case 2:
                     producto.setId(Long.parseLong(dato1));
-                    consulta.actualizarProducto(producto);
+                    //consulta.actualizarProducto(producto);
+                    consultaHB.modificarProducto(producto);
                     break;
                 case 3:
                     producto.setId(Long.parseLong(dato1));
-                    consulta.eliminarProducto(producto);
+                    //consulta.eliminarProducto(producto);
+                    consultaHB.eliminarProducto(producto);
                     break;
             }
 
-            setProductos(consulta.consultarProductos());
+            //setProductos(consulta.consultarProductos());
+            setProductos(consultaHB.consultarProducto());
 
             System.out.println("la conexion es: " + con.conexionMysql());
             System.out.println("La lista de clientes es: " + getClientes().size());
@@ -357,16 +359,44 @@ public class InicioUI implements Serializable {
     }
 
     /**
+     * @return the cliente
+     */
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    /**
+     * @param cliente the cliente to set
+     */
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    /**
+     * @return the orden
+     */
+    public Orden getOrden() {
+        return orden;
+    }
+
+    /**
+     * @param orden the orden to set
+     */
+    public void setOrden(Orden orden) {
+        this.orden = orden;
+    }
+
+    /**
      * @return the productos
      */
-    public List<DatosDTO> getProductos() {
+    public List<Producto> getProductos() {
         return productos;
     }
 
     /**
      * @param productos the productos to set
      */
-    public void setProductos(List<DatosDTO> productos) {
+    public void setProductos(List<Producto> productos) {
         this.productos = productos;
     }
 
@@ -443,109 +473,89 @@ public class InicioUI implements Serializable {
     /**
      * @return the ordenes
      */
-    public List<DatosDTO> getOrdenes() {
+    public List<Orden> getOrdenes() {
         return ordenes;
     }
 
     /**
      * @param ordenes the ordenes to set
      */
-    public void setOrdenes(List<DatosDTO> ordenes) {
+    public void setOrdenes(List<Orden> ordenes) {
         this.ordenes = ordenes;
     }
 
     /**
      * @return the detalle_ordenes
      */
-    public List<DatosDTO> getDetalle_ordenes() {
-        return detalle_ordenes;
+    public List<Detalle_orden> getDetalleOrdenes() {
+        return detalleOrdenes;
     }
 
     /**
      * @param detalle_ordenes the detalle_ordenes to set
      */
-    public void setDetalle_ordenes(List<DatosDTO> detalle_ordenes) {
-        this.detalle_ordenes = detalle_ordenes;
+    public void setDetalleOrdenes(List<Detalle_orden> detalleOrdenes) {
+        this.detalleOrdenes = detalleOrdenes;
     }
 
     /**
      * @param mensaje the mensaje to set
      */
-    public void onRowSelect(SelectEvent event) {
-        datos = (Cliente) event.getObject();
+    public void clienteSeleccionado(SelectEvent event) {
+        cliente = (Cliente) event.getObject();
 
-        dato1 = Long.toString(datos.getId());
-        dato2 = datos.getNombre();
-        dato3 = datos.getCorreo();
-        dato4 = datos.getDireccion();
-        dato5 = datos.getTelefono();
-        /*
-        dato8 = datos.getFecha();
+        //datos cliente
+        dato1 = Long.toString(getCliente().getId());
+        dato2 = cliente.getNombre();
+        dato3 = cliente.getCorreo();
+        dato4 = cliente.getDireccion();
+        dato5 = cliente.getTelefono();
 
-        if (datos.getCliente_id() != null && datos.getTotal() != null) {
-            dato6 = Long.toString(datos.getCliente_id());
-            dato7 = Long.toString(datos.getTotal());
-        }
-
-        if (datos.getOrden_id() != null && datos.getProducto_id() != null  && datos.getCantidad() != null && datos.getPrecio() != null) {
-            dato9 = Long.toString(datos.getOrden_id());
-            dato10 = Long.toString(datos.getProducto_id());
-            dato11 = Long.toString(datos.getCantidad());
-            dato12 = Long.toString(datos.getPrecio());
-        }
-        
-        if (datos.getCantidad() != null && datos.getPrecio() != null){
-            dato11 = Long.toString(datos.getCantidad());
-            dato12 = Long.toString(datos.getPrecio());
-        }
-        
-        dato13 = datos.getDescripcion();
-         */
         band = true;
-
-        System.out.println("ELEMENTO SELECCIONADO---------------------------");
 
     }
 
-    /*
-    //Cuando se selecciona un dato
-    public void onRowSelect(SelectEvent event) {
-        datos = (DatosDTO) event.getObject();
+    public void ordenSeleccionada(SelectEvent event) {
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        String fechaFormateada;
 
-        dato1 = Long.toString(datos.getId());
-        dato2 = datos.getNombre();
-        dato3 = datos.getCorreo();
-        dato4 = datos.getDireccion();
-        dato5 = datos.getTelefono();
+        orden = (Orden) event.getObject();
 
-        dato8 = datos.getFecha();
+        dato1 = Long.toString(orden.getId());
+        dato6 = Long.toString(orden.getCliente_id());
+        dato7 = Long.toString(orden.getTotal());
 
-        if (datos.getCliente_id() != null && datos.getTotal() != null) {
-            dato6 = Long.toString(datos.getCliente_id());
-            dato7 = Long.toString(datos.getTotal());
-        }
+        fechaFormateada = formato.format(orden.getFecha());
+        dato8 = fechaFormateada;
 
-        if (datos.getOrden_id() != null && datos.getProducto_id() != null  && datos.getCantidad() != null && datos.getPrecio() != null) {
-            dato9 = Long.toString(datos.getOrden_id());
-            dato10 = Long.toString(datos.getProducto_id());
-            dato11 = Long.toString(datos.getCantidad());
-            dato12 = Long.toString(datos.getPrecio());
-        }
-        
-        if (datos.getCantidad() != null && datos.getPrecio() != null){
-            dato11 = Long.toString(datos.getCantidad());
-            dato12 = Long.toString(datos.getPrecio());
-        }
-        
-        dato13 = datos.getDescripcion();
-        
         band = true;
-        
-        
-        System.out.println("ELEMENTO SELECCIONADO---------------------------");
 
     }
-     */
+
+    public void detalleSeleccionado(SelectEvent event) {
+        detalle = (Detalle_orden) event.getObject();
+
+        dato1 = Long.toString(detalle.getId());
+        dato9 = Long.toString(detalle.getOrden_id());
+        dato10 = Long.toString(detalle.getProducto_id());
+        dato11 = Long.toString(detalle.getCantidad());
+        dato12 = Long.toString(detalle.getPrecio());
+      
+        band = true;
+    }
+    
+    public void productoSeleccionado(SelectEvent event) {
+        producto = (Producto) event.getObject();
+
+        dato1 = Long.toString(producto.getId());
+        dato2 = producto.getNombre();
+        dato13 = producto.getDescripcion();
+        dato12 = Long.toString(producto.getPrecio());
+        dato11 = Long.toString(producto.getCantidad());
+      
+        band = true;
+    }
+
     public void onRowUnselect(UnselectEvent event) {
         dato1 = "";
         dato2 = "";
@@ -553,6 +563,21 @@ public class InicioUI implements Serializable {
         dato4 = "";
         dato5 = "";
 
+    }
+    
+    
+    /**
+     * @return the producto
+     */
+    public Producto getProducto() {
+        return producto;
+    }
+
+    /**
+     * @param producto the producto to set
+     */
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
     /**
@@ -623,20 +648,6 @@ public class InicioUI implements Serializable {
      */
     public void setDato7(String dato7) {
         this.dato7 = dato7;
-    }
-
-    /**
-     * @return the datos
-     */
-    public Cliente getDatos() {
-        return datos;
-    }
-
-    /**
-     * @param datos the datos to set
-     */
-    public void setDatos(Cliente datos) {
-        this.datos = datos;
     }
 
     /**

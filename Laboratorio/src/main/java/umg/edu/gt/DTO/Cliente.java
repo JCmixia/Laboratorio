@@ -20,6 +20,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "clientes")
 public class Cliente implements Serializable{
+    
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
@@ -47,6 +48,7 @@ public class Cliente implements Serializable{
     public Cliente (){
         
     }
+    
     /**
      * @return the id
      */
